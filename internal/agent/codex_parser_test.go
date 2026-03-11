@@ -80,6 +80,14 @@ func TestCodexOutputParser_ReadFinding(t *testing.T) {
 			input:      `{"item": {"type": "agent_message", "text": "Finding with \"quotes\" and\nnewlines"}}`,
 			want:       []string{"Finding with \"quotes\" and\nnewlines"},
 		},
+		{
+			name:       "non-finding text filtered",
+			reviewerID: 1,
+			input: `{"item": {"type": "agent_message", "text": "No issues found."}}
+{"item": {"type": "agent_message", "text": "main.go:10: actual bug here"}}
+{"item": {"type": "agent_message", "text": "Looks good, no problems."}}`,
+			want: []string{"main.go:10: actual bug here"},
+		},
 	}
 
 	for _, tt := range tests {
