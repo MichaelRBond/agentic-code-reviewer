@@ -64,8 +64,9 @@ func (p *CodexOutputParser) ReadFinding(scanner *bufio.Scanner) (*domain.Finding
 			}
 		}
 
-		// Only process agent_message items with non-empty text
-		if event.Item.Type == "agent_message" && event.Item.Text != "" {
+		// Only process agent_message items with non-empty, actionable text
+		if event.Item.Type == "agent_message" && event.Item.Text != "" &&
+			!IsNonFindingText(event.Item.Text) {
 			return &domain.Finding{
 				Text:       event.Item.Text,
 				ReviewerID: p.reviewerID,
